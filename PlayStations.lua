@@ -379,7 +379,7 @@ function Library:CreateWindow(windowname,windowinfo)
             
         end
 
-        function PageElements:addToggle(togglename,callback)
+        function PageElements:addToggle(togglename, default, callback)
             local ToggleHolder = Instance.new("Frame")
             local ToggleHolderCorner = Instance.new("UICorner")
             local ToggleTitle = Instance.new("TextLabel")
@@ -390,7 +390,7 @@ function Library:CreateWindow(windowname,windowinfo)
             local ToggleBallCorner = Instance.new("UICorner")
 
             local callback = callback or function() end
-            local ToggleEnabled = false
+            local ToggleEnabled = default or false
 
             ToggleHolder.Name = "ToggleHolder"
             ToggleHolder.Parent = Home
@@ -451,6 +451,13 @@ function Library:CreateWindow(windowname,windowinfo)
             ToggleBallCorner.Name = "ToggleBallCorner"
             ToggleBallCorner.Parent = ToggleBall
 
+            if ToggleEnabled then
+                ToggleBall.Position = UDim2.new(0.55,0,0.15,0)
+            else
+                ToggleBall.Position = UDim2.new(0.1,0,0.15,0)
+            end
+            pcall(callback, ToggleEnabled)
+
             ToggleButton.MouseButton1Down:Connect(function()
                 ToggleEnabled = not ToggleEnabled
                 if ToggleEnabled then 
@@ -466,7 +473,7 @@ function Library:CreateWindow(windowname,windowinfo)
                     ToggleHolder.BackgroundColor3 = Color3.fromRGB(17,17,17)
                     ToggleBall:TweenPosition(UDim2.new(0.123, 0,0.158, 0),"Out","Linear",0.1)
                 end
-                pcall(callback,ToggleEnabled)
+                pcall(callback, ToggleEnabled)
             end)
         end
 
